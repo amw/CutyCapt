@@ -208,6 +208,7 @@ CutyCapt::saveSnapshot() {
     case PsFormat: {
       QPrinter printer;
       printer.setPaperSize(mPaperSize,QPrinter::Millimeter);
+      printer.setPageMargins( 5, 5, 5, 5, QPrinter::Millimeter);
       printer.setOutputFileName(mOutput);
       // TODO: change quality here?
       mainFrame->print(&printer);
