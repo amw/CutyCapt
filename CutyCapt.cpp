@@ -120,13 +120,17 @@ CutyPage::setAttribute(QWebSettings::WebAttribute option,
 
 // TODO: Consider merging some of main() and CutyCap
 
-CutyCapt::CutyCapt(CutyPage* page, const QString& output, int delay, OutputFormat format) {
+CutyCapt::CutyCapt(
+  CutyPage* page, const QString& output, int delay, OutputFormat format,
+  QSizeF paperSize
+) {
   mPage = page;
   mOutput = output;
   mDelay = delay;
   mSawInitialLayout = false;
   mSawDocumentComplete = false;
   mFormat = format;
+  mPaperSize = paperSize;
 }
 
 void
@@ -203,7 +207,7 @@ CutyCapt::saveSnapshot() {
     case PdfFormat:
     case PsFormat: {
       QPrinter printer;
-      printer.setPageSize(QPrinter::A4);
+      printer.setPaperSize(mPaperSize,QPrinter::Millimeter);
       printer.setOutputFileName(mOutput);
       // TODO: change quality here?
       mainFrame->print(&printer);
@@ -288,6 +292,7 @@ main(int argc, char *argv[]) {
   QString argOut;
 
   CutyCapt::OutputFormat format = CutyCapt::OtherFormat;
+  QSizeF paperSize( 210.0f, 297.0f );
 
   QApplication app(argc, argv, true);
   CutyPage page;
@@ -434,6 +439,24 @@ main(int argc, char *argv[]) {
       else 
         (void)0; // TODO: ...
 
+    } else if (strncmp("--paper-width=", s, nlen ) ==0) {
+      unsigned int dimension = (unsigned int)atoi(value);
+      if ( dimension < 40 ) {
+        argHelp = 1;
+      }
+      else {
+        paperSize.setWidth( dimension );
+      }
+
+    } else if (strncmp("--paper-height=", s, nlen ) ==0) {
+      unsigned int dimension = (unsigned int)atoi(value);
+      if ( dimension < 40 ) {
+        argHelp = 1;
+      }
+      else {
+        paperSize.setHeight( dimension );
+      }
+
     } else {
       // TODO: error
       argHelp = 1;
@@ -447,7 +470,7 @@ main(int argc, char *argv[]) {
 
   req.setUrl( QUrl(argUrl) );
 
-  CutyCapt main(&page, argOut, argDelay, format);
+  CutyCapt main(&page, argOut, argDelay, format, paperSize);
 
   app.connect(&page,
     SIGNAL(loadFinished(bool)),

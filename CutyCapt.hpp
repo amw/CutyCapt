@@ -27,7 +27,9 @@ public:
     RenderTreeFormat, PngFormat, JpegFormat, MngFormat, TiffFormat, GifFormat,
     BmpFormat, PpmFormat, XbmFormat, XpmFormat, OtherFormat };
 
-  CutyCapt(CutyPage* page, const QString& output, int delay, OutputFormat format);
+  CutyCapt(
+    CutyPage* page, const QString& output, int delay, OutputFormat format,
+    QSizeF paperSize );
 
 private slots:
   void DocumentComplete(bool ok);
@@ -46,6 +48,6 @@ protected:
   int          mDelay;
   CutyPage*    mPage;
   OutputFormat mFormat;
-
+  QSizeF       mPaperSize;
 };
 
