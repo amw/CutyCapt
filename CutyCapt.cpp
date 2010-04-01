@@ -18,14 +18,15 @@
 //
 ////////////////////////////////////////////////////////////////////
 
-#include <QApplication>
-#include <QtWebKit>
-#include <QtGui>
-#include <QSvgGenerator>
-#include <QPrinter>
-#include <QTimer>
-#include <QByteArray>
-#include <QNetworkRequest>
+#include <QtCore/QByteArray>
+#include <QtCore/QTimer>
+#include <QtGui/QApplication>
+#include <QtGui/QtGui>
+#include <QtGui/QPrinter>
+#include <QtNetwork/QNetworkRequest>
+#include <QtSvg/QSvgGenerator>
+#include <QtWebKit/QtWebKit>
+
 #include "CutyCapt.hpp"
 
 #ifdef STATIC_PLUGINS
@@ -351,7 +352,7 @@ main(int argc, char *argv[]) {
       argMaxWait = (unsigned int)atoi(value);
 
     } else if (strncmp("--out", s, nlen) == 0) {
-      argOut = value;
+      argOut = QString::fromLocal8Bit( value );
 
       if (format == CutyCapt::OtherFormat)
         for (int ix = 0; CutyExtMap[ix].id != CutyCapt::OtherFormat; ++ix)

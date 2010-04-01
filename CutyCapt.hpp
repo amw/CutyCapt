@@ -1,4 +1,4 @@
-#include <QtWebKit>
+#include <QtWebKit/QtWebKit>
 
 class CutyPage : public QWebPage {
   Q_OBJECT
