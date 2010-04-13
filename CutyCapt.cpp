@@ -299,6 +299,8 @@ main(int argc, char *argv[]) {
   QApplication app(argc, argv, true);
   CutyPage page;
 
+  page.setAttribute( QWebSettings::LocalContentCanAccessRemoteUrls, "on" );
+
   QNetworkAccessManager::Operation method =
     QNetworkAccessManager::GetOperation;
   QByteArray body;
