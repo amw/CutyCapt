@@ -294,7 +294,7 @@ main(int argc, char *argv[]) {
   QString argOut;
 
   CutyCapt::OutputFormat format = CutyCapt::OtherFormat;
-  QSizeF paperSize( 210.0f, 297.0f );
+  QSizeF paperSize( 215.9f, 279.4f );
 
   QApplication app(argc, argv, true);
   CutyPage page;
