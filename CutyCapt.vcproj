@@ -15,7 +15,7 @@
 	</Platforms>
 	<ToolFiles>
 		<ToolFile
-			RelativePath="..\..\Qt Tools.rules"
+			RelativePath="Qt Tools.rules"
 		/>
 	</ToolFiles>
 	<Configurations>

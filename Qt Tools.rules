@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VisualStudioToolFile
+	Name="Qt Tools"
+	Version="8.00"
+	>
+	<Rules>
+		<CustomBuildRule
+			Name="Qt User Interface Compiler"
+			DisplayName="Qt User Interface Compiler"
+			CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; &quot;$(InputPath)&quot; -o &quot;$(SolutionDir)\tmp\ui\$(ProjectName)\ui_$(InputName).hpp&quot;"
+			Outputs="&quot;$(SolutionDir)\tmp\ui\$(ProjectName)\ui_$(InputName).hpp&quot;"
+			AdditionalDependencies="&quot;$(InputPath)&quot;"
+			FileExtensions="*.ui"
+			ExecutionDescription="UIC [inputs]"
+			>
+			<Properties>
+			</Properties>
+		</CustomBuildRule>
+		<CustomBuildRule
+			Name="Qt Resource Compiler"
+			DisplayName="Qt Resource Compiler"
+			CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; &quot;$(InputPath)&quot; -o &quot;$(SolutionDir)\tmp\rcc\$(ProjectName)\rcc_$(InputName).cpp&quot;"
+			Outputs="&quot;$(SolutionDir)\tmp\rcc\$(ProjectName)\rcc_$(InputName).cpp&quot;"
+			AdditionalDependencies="&quot;$(InputPath)&quot;"
+			FileExtensions="*.rcc"
+			ExecutionDescription="RCC [inputs]"
+			>
+			<Properties>
+			</Properties>
+		</CustomBuildRule>
+		<CustomBuildRule
+			Name="Qt Meta Object Compiler"
+			DisplayName="Qt Meta Object Compiler"
+			CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_THREAD_SUPPORT -D_MSC_VER=1500 -DWIN32 &quot;$(InputPath)&quot; -o &quot;$(SolutionDir)\tmp\moc\$(ProjectName)\moc_$(InputName).cpp&quot;"
+			Outputs="&quot;$(SolutionDir)\tmp\moc\$(ProjectName)\moc_$(InputName).cpp&quot;"
+			AdditionalDependencies="&quot;$(InputPath)&quot;"
+			FileExtensions="*.hpp"
+			ExecutionDescription="MOC [inputs]"
+			>
+			<Properties>
+			</Properties>
+		</CustomBuildRule>
+	</Rules>
+</VisualStudioToolFile>
