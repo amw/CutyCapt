@@ -251,6 +251,8 @@ CaptHelp(void) {
     "  --out-format=<f>               Like extension in --out, overrides heuristic \n"
 //  "  --out-quality=<int>            Output format quality from 1 to 100          \n"
     "  --min-width=<int>              Minimal width for the image (default: 800)   \n"
+    "  --paper-width=<mm>             Paper width when printing pdf (default: 210)\n"
+    "  --paper-height=<mm>            Paper height when printing pdf (default: 297)\n"
     "  --max-wait=<ms>                Don't wait more than (default: 90000, inf: 0)\n"
     "  --delay=<ms>                   After successful load, wait (default: 0)     \n"
     "  --user-styles=<url>            Location of user style sheet, if any         \n"
