@@ -1,5 +1,5 @@
 #include <QtWebKit/QtWebKit>
-#include <QPrinter>
+#include <QtGui/QPrinter>
 
 class CutyPage : public QWebPage {
   Q_OBJECT
