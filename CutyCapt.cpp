@@ -209,9 +209,9 @@ CutyCapt::saveSnapshot() {
     case PdfFormat:
     case PsFormat: {
       QPrinter printer;
+      printer.setOrientation( mOrientation );
       printer.setPaperSize(mPaperSize,QPrinter::Millimeter);
       printer.setPageMargins( 5, 5, 5, 5, QPrinter::Millimeter);
-      printer.setOrientation( mOrientation );
       printer.setOutputFileName(mOutput);
       // TODO: change quality here?
       mainFrame->print(&printer);
@@ -331,6 +331,10 @@ main(int argc, char *argv[]) {
     } else if (strcmp("--verbose", s) == 0) {
       argVerbosity++;
       continue;
+
+    } else if (strcmp("--landscape", s ) ==0) {
+      orientation = QPrinter::Landscape;
+
     } 
 
     value = strchr(s, '=');
@@ -466,9 +470,6 @@ main(int argc, char *argv[]) {
       else {
         paperSize.setHeight( dimension );
       }
-
-    } else if (strncmp("--landscape", s, nlen ) ==0) {
-      orientation = QPrinter::Landscape;
 
     } else {
       // TODO: error
