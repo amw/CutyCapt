@@ -123,7 +123,7 @@ CutyPage::setAttribute(QWebSettings::WebAttribute option,
 
 CutyCapt::CutyCapt(
   CutyPage* page, const QString& output, int delay, OutputFormat format,
-  QSizeF paperSize
+  QSizeF paperSize, QPrinter::Orientation orientation
 ) {
   mPage = page;
   mOutput = output;
@@ -132,6 +132,7 @@ CutyCapt::CutyCapt(
   mSawDocumentComplete = false;
   mFormat = format;
   mPaperSize = paperSize;
+  mOrientation = orientation;
 }
 
 void
@@ -210,6 +211,7 @@ CutyCapt::saveSnapshot() {
       QPrinter printer;
       printer.setPaperSize(mPaperSize,QPrinter::Millimeter);
       printer.setPageMargins( 5, 5, 5, 5, QPrinter::Millimeter);
+      printer.setOrientation( mOrientation );
       printer.setOutputFileName(mOutput);
       // TODO: change quality here?
       mainFrame->print(&printer);
@@ -253,6 +255,7 @@ CaptHelp(void) {
     "  --min-width=<int>              Minimal width for the image (default: 800)   \n"
     "  --paper-width=<mm>             Paper width when printing pdf (default: 210)\n"
     "  --paper-height=<mm>            Paper height when printing pdf (default: 297)\n"
+    "  --landscape                    Print pdf in landscape (default: portrait)\n"
     "  --max-wait=<ms>                Don't wait more than (default: 90000, inf: 0)\n"
     "  --delay=<ms>                   After successful load, wait (default: 0)     \n"
     "  --user-styles=<url>            Location of user style sheet, if any         \n"
@@ -297,6 +300,7 @@ main(int argc, char *argv[]) {
 
   CutyCapt::OutputFormat format = CutyCapt::OtherFormat;
   QSizeF paperSize( 215.9f, 279.4f );
+  QPrinter::Orientation orientation = QPrinter::Portrait;
 
   QApplication app(argc, argv, true);
   CutyPage page;
@@ -463,6 +467,9 @@ main(int argc, char *argv[]) {
         paperSize.setHeight( dimension );
       }
 
+    } else if (strncmp("--landscape", s, nlen ) ==0) {
+      orientation = QPrinter::Landscape;
+
     } else {
       // TODO: error
       argHelp = 1;
@@ -476,7 +483,7 @@ main(int argc, char *argv[]) {
 
   req.setUrl( QUrl(argUrl) );
 
-  CutyCapt main(&page, argOut, argDelay, format, paperSize);
+  CutyCapt main(&page, argOut, argDelay, format, paperSize, orientation );
 
   app.connect(&page,
     SIGNAL(loadFinished(bool)),

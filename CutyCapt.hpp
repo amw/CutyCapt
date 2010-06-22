@@ -1,4 +1,5 @@
 #include <QtWebKit/QtWebKit>
+#include <QPrinter>
 
 class CutyPage : public QWebPage {
   Q_OBJECT
@@ -29,7 +30,7 @@ public:
 
   CutyCapt(
     CutyPage* page, const QString& output, int delay, OutputFormat format,
-    QSizeF paperSize );
+    QSizeF paperSize, QPrinter::Orientation );
 
 private slots:
   void DocumentComplete(bool ok);
@@ -49,5 +50,6 @@ protected:
   CutyPage*    mPage;
   OutputFormat mFormat;
   QSizeF       mPaperSize;
+  QPrinter::Orientation mOrientation;
 };
 
