@@ -334,6 +334,7 @@ main(int argc, char *argv[]) {
 
     } else if (strcmp("--landscape", s ) ==0) {
       orientation = QPrinter::Landscape;
+      continue;
 
     } 
 
