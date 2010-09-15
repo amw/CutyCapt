@@ -30,7 +30,7 @@ public:
 
   CutyCapt(
     CutyPage* page, const QString& output, int delay, OutputFormat format,
-    QSizeF paperSize, QPrinter::Orientation );
+    QSizeF paperSize, QPrinter::Orientation, QStringList cssSelectors );
 
 private slots:
   void DocumentComplete(bool ok);
@@ -40,7 +40,8 @@ private slots:
 
 private:
   void TryDelayedRender();
-  void saveSnapshot();
+  int saveSnapshot();
+  bool assertElements( QWebFrame* frame );
   bool mSawInitialLayout;
   bool mSawDocumentComplete;
 
@@ -51,5 +52,6 @@ protected:
   OutputFormat mFormat;
   QSizeF       mPaperSize;
   QPrinter::Orientation mOrientation;
+  QStringList  mCssSelectors;
 };
 

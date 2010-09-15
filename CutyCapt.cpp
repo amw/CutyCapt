@@ -123,7 +123,7 @@ CutyPage::setAttribute(QWebSettings::WebAttribute option,
 
 CutyCapt::CutyCapt(
   CutyPage* page, const QString& output, int delay, OutputFormat format,
-  QSizeF paperSize, QPrinter::Orientation orientation
+  QSizeF paperSize, QPrinter::Orientation orientation, QStringList cssSelectors
 ) {
   mPage = page;
   mOutput = output;
@@ -133,6 +133,7 @@ CutyCapt::CutyCapt(
   mFormat = format;
   mPaperSize = paperSize;
   mOrientation = orientation;
+  mCssSelectors = cssSelectors;
 }
 
 void
@@ -159,25 +160,27 @@ CutyCapt::TryDelayedRender() {
     return;
   }
 
-  saveSnapshot();
-  QApplication::exit();
+  QApplication::exit(saveSnapshot());
 }
 
 void
 CutyCapt::Timeout() {
-  saveSnapshot();
-  QApplication::exit();
+  QApplication::exit(saveSnapshot());
 }
 
 void
 CutyCapt::Delayed() {
-  saveSnapshot();
-  QApplication::exit();
+  QApplication::exit(saveSnapshot());
 }
 
-void
+int
 CutyCapt::saveSnapshot() {
   QWebFrame *mainFrame = mPage->mainFrame();
+
+  if ( ! assertElements( mainFrame ) ) {
+    return EXIT_FAILURE;
+  }
+
   QPainter painter;
   const char* format = NULL;
 
@@ -239,6 +242,21 @@ CutyCapt::saveSnapshot() {
       image.save(mOutput, format);
     }
   };
+
+  return 0;
+}
+
+bool
+CutyCapt::assertElements( QWebFrame* frame ) {
+  for ( int i = 0; i < mCssSelectors.size(); ++i ) {
+    QWebElement element = frame->findFirstElement( mCssSelectors[i] );
+    if ( element.isNull() ) {
+      qDebug() << "Couldn't find element for" << mCssSelectors[i];
+      return false;
+    }
+  }
+
+  return true;
 }
 
 void
@@ -275,6 +293,9 @@ CaptHelp(void) {
     "  --auto-load-images=<on|off>    Automatic image loading (default: on)        \n"
     "  --js-can-open-windows=<on|off> Script can open windows? (default: unknown)  \n"
     "  --js-can-access-clipboard=<on|off> Script clipboard privs (default: unknown)\n"
+    "  --assert-element=<string>      Assert element given by css2 selector exists \n"
+    "                                 before taking snapshot. Can be given multiple\n"
+    "                                 times.\n"
     " -----------------------------------------------------------------------------\n"
     "  <f> is svg,ps,pdf,itext,html,rtree,png,jpeg,mng,tiff,gif,bmp,ppm,xbm,xpm    \n"
     " -----------------------------------------------------------------------------\n"
@@ -301,6 +322,7 @@ main(int argc, char *argv[]) {
   CutyCapt::OutputFormat format = CutyCapt::OtherFormat;
   QSizeF paperSize( 215.9f, 279.4f );
   QPrinter::Orientation orientation = QPrinter::Portrait;
+  QStringList cssSelectors;
 
   QApplication app(argc, argv, true);
   CutyPage page;
@@ -463,6 +485,15 @@ main(int argc, char *argv[]) {
         paperSize.setWidth( dimension );
       }
 
+    } else if (strncmp("--assert-element=", s, nlen ) ==0) {
+      QString selector = value;
+      if ( selector.length() ) {
+        cssSelectors.append( value );
+      }
+      else {
+        argHelp = 1;
+      }
+
     } else if (strncmp("--paper-height=", s, nlen ) ==0) {
       unsigned int dimension = (unsigned int)atoi(value);
       if ( dimension < 40 ) {
@@ -485,7 +516,8 @@ main(int argc, char *argv[]) {
 
   req.setUrl( QUrl(argUrl) );
 
-  CutyCapt main(&page, argOut, argDelay, format, paperSize, orientation );
+  CutyCapt main(
+    &page, argOut, argDelay, format, paperSize, orientation, cssSelectors );
 
   app.connect(&page,
     SIGNAL(loadFinished(bool)),
