@@ -8,3 +8,7 @@ contains(CONFIG, static): {
   DEFINES  += STATIC_PLUGINS
 }
 
+macx {
+  CONFIG -= app_bundle
+}
+
