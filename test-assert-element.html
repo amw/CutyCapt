@@ -1,0 +1,19 @@
+<html>
+  <head><title>CutyCapt's --assert-element test page</title></head>
+  <body>
+    <div id="hola">Hola
+      <script type="text/javascript">
+        document.write( "<span>amigo!</span>" );
+
+        function addLink() {
+          var link = document.createElement( "a" );
+          link.setAttribute( "href", "http://google.com" );
+          link.appendChild( document.createTextNode( "My new link" ) );
+          document.getElementById( "hola" ).appendChild( link );
+        }
+
+        setTimeout( "addLink()", 1000 );
+      </script>
+    </div>
+  </body>
+</html>
