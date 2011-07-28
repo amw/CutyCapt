@@ -80,10 +80,13 @@ CutyPage::javaScriptPrompt(QWebFrame* /*frame*/,
 }
 
 void
-CutyPage::javaScriptConsoleMessage(const QString& /*message*/,
-                                   int /*lineNumber*/,
-                                   const QString& /*sourceID*/) {
-  // noop
+CutyPage::javaScriptConsoleMessage(const QString& message,
+                                   int lineNumber,
+                                   const QString& sourceID) {
+  qWarning()
+    << "Javascript console:" << message
+    << "Line:" << lineNumber
+    << "File:" << sourceID;
 }
 
 void
